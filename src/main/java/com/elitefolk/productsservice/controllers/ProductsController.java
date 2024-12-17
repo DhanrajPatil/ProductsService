@@ -1,6 +1,8 @@
 package com.elitefolk.productsservice.controllers;
 
 import com.elitefolk.productsservice.models.Product;
+import com.elitefolk.productsservice.services.ProductsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -8,10 +10,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductsController {
+    @Autowired
+    ProductsService productsService;
 
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable Long id) {
-        return new Product();
+    public Product getProduct(@PathVariable("id") Long id) {
+        return productsService.getProductById(id);
     }
 
     @GetMapping
