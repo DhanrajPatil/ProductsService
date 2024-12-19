@@ -20,26 +20,26 @@ public class ProductsController {
 
     @GetMapping
     public List<Product> getProducts() {
-        return null;
+        return productsService.getProducts();
     }
 
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
-        return null;
+        return productsService.saveProduct(product);
     }
 
     @PutMapping
     public Product replaceProduct(@RequestBody Product product) {
-        return null;
+        return productsService.updateProduct(product);
     }
 
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id) {
-
+        productsService.deleteProduct(id);
     }
 
     @PatchMapping("/{id}")
     public Product partialProduct(@PathVariable Long id, @RequestBody Product product) {
-        return null;
+        return productsService.partialProduct(id, product);
     }
 }
