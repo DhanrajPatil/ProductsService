@@ -44,14 +44,7 @@ public class FakeStoreProductService implements ProductsService {
 
     @Override
     public Product saveProduct(Product product) {
-        FakeStoreProductDto fakeProductDto = new FakeStoreProductDto(
-                product.getId(),
-                product.getName(),
-                product.getPrice(),
-                product.getCategory().getName(),
-                product.getDescription(),
-                product.getImageUrl()
-        );
+        FakeStoreProductDto fakeProductDto = FakeStoreProductDto.fromProduct(product);
         return restTemplate.postForObject(
                 "https://fakestoreapi.com/products/",
                 fakeProductDto,
@@ -61,14 +54,7 @@ public class FakeStoreProductService implements ProductsService {
 
     @Override
     public Product updateProduct(Product product) {
-        FakeStoreProductDto fakeProductDto = new FakeStoreProductDto(
-                product.getId(),
-                product.getName(),
-                product.getPrice(),
-                product.getCategory().getName(),
-                product.getDescription(),
-                product.getImageUrl()
-        );
+        FakeStoreProductDto fakeProductDto = FakeStoreProductDto.fromProduct(product);
         restTemplate.put(
                 "https://fakestoreapi.com/products/" + product.getId(),
                 fakeProductDto
@@ -83,11 +69,7 @@ public class FakeStoreProductService implements ProductsService {
 
     @Override
     public Product partialProduct(Long id, Product product) {
-        FakeStoreProductDto fakeProductDto = new FakeStoreProductDto();
-        fakeProductDto.setId(product.getId());
-        fakeProductDto.setPrice(product.getPrice());
-        fakeProductDto.setDescription(product.getDescription());
-        fakeProductDto.setImage(product.getImageUrl());
+        FakeStoreProductDto fakeProductDto = FakeStoreProductDto.fromProduct(product);
         restTemplate.patchForObject(
                 "https://fakestoreapi.com/products/" + id,
                 fakeProductDto,

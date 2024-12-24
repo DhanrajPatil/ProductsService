@@ -3,6 +3,7 @@ package com.elitefolk.productsservice.controllers;
 import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.services.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductsController {
     @Autowired
+    @Qualifier("productServiceImpl")
     ProductsService productsService;
 
     @GetMapping("/{id}")
