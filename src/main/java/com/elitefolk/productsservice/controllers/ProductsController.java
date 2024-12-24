@@ -2,7 +2,7 @@ package com.elitefolk.productsservice.controllers;
 
 import com.elitefolk.productsservice.dtos.ProductDto;
 import com.elitefolk.productsservice.models.Product;
-import com.elitefolk.productsservice.services.ProductsService;
+import com.elitefolk.productsservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ public class ProductsController {
     // it will be difficult task to inject it with field injection
     @Autowired
     @Qualifier("productServiceImpl")
-    ProductsService productsService;
+    ProductService productsService;
 
     // Constructor Injection is recommended as it is a good practice
     // it is recommended by Spring
@@ -27,7 +27,7 @@ public class ProductsController {
     // as we can pass the mock object in the constructor
     // it will be injected into the controller
     // we can test the controller
-    /*    public ProductsController(@Qualifier("productServiceImpl") ProductsService productsService) {
+    /*    public ProductsController(@Qualifier("productServiceImpl") ProductService productsService) {
         this.productsService = productsService;
     } */
 

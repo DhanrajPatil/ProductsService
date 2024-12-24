@@ -2,7 +2,10 @@ package com.elitefolk.productsservice.services;
 
 import com.elitefolk.productsservice.exceptions.CategoryNotFoundException;
 import com.elitefolk.productsservice.models.Category;
+import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.repositories.CategoryRepository;
+import com.elitefolk.productsservice.repositories.ProductRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +14,12 @@ import java.util.UUID;
 @Service
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepo;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository,
+                               ProductRepository productRepo) {
         this.categoryRepository = categoryRepository;
+        this.productRepo = productRepo;
     }
 
     @Override
@@ -56,5 +62,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> getCategoriesByNameContains(String containingName) {
         return this.categoryRepository.findByNameContains(containingName);
+    }
+
+    @Override
+    public List<Product> getProductsForCategory(String categoryName) {
+        return this.productRepo.findByCategoryNameIgnoreCase(categoryName);
     }
 }

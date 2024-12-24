@@ -1,7 +1,10 @@
 package com.elitefolk.productsservice.controllers;
 
+import com.elitefolk.productsservice.dtos.ProductDto;
 import com.elitefolk.productsservice.models.Category;
+import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.services.CategoryService;
+import com.elitefolk.productsservice.services.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +33,12 @@ public class CategoryController {
     @GetMapping("/name/{categoryName}")
     public Category getCategoryByName(@PathVariable String categoryName) {
         return this.categoryService.getCategoryByName(categoryName);
+    }
+
+    @GetMapping("/{categoryName}/products")
+    public List<ProductDto> getProductsForCategory(@PathVariable String categoryName) {
+        List<Product> products = this.categoryService.getProductsForCategory(categoryName);
+        return ProductDto.fromProductsToDtoList(products);
     }
 
     @PostMapping

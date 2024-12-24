@@ -1,5 +1,6 @@
 package com.elitefolk.productsservice.repositories;
 
+import com.elitefolk.productsservice.models.Category;
 import com.elitefolk.productsservice.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -19,7 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     List<Product> findByIdIn(List<UUID> ids);
 
-    List<Product> findByCategoryName(String categoryName);
+    List<Product> findByCategoryNameIgnoreCase(String categoryName);
 
     @Override
     <S extends Product> S save(S entity);

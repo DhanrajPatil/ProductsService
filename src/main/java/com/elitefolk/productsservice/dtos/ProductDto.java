@@ -45,8 +45,12 @@ public class ProductDto {
         if(this.categoryId != null) {
             category.setId(UUID.fromString(this.categoryId));
         }
-        category.setName(this.categoryName);
-        product.setCategory(category);
+        if(this.categoryName != null) {
+            category.setName(this.categoryName);
+        }
+        if(this.categoryId != null || this.categoryName != null) {
+            product.setCategory(category);
+        }
         return product;
     }
 

@@ -1,6 +1,7 @@
 package com.elitefolk.productsservice.services;
 
 import com.elitefolk.productsservice.models.Category;
+import com.elitefolk.productsservice.models.Product;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,4 +15,6 @@ public interface CategoryService {
     void deleteCategory(String categoryId);
     List<Category> getCategoriesByIds(List<UUID> categoryIds);
     List<Category> getCategoriesByNameContains(String containingName);
+
+    List<Product> getProductsForCategory(String categoryName);
 }

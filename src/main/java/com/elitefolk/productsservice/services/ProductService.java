@@ -5,7 +5,7 @@ import com.elitefolk.productsservice.models.Product;
 
 import java.util.List;
 
-public interface ProductsService {
+public interface ProductService {
     List<Product> getProducts();
     Product getProductById(String id) throws ProductNotFoundException;
     Product saveProduct(Product product);
