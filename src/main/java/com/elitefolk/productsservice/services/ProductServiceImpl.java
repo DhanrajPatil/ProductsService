@@ -49,7 +49,6 @@ public class ProductServiceImpl implements ProductsService{
                     product.setCategory(category);
                 }
             }
-
             return this.productRepository.save(product);
         } else{
             throw new CategoryMissingInProductException("Category is required, It cannot be empty");
@@ -58,7 +57,7 @@ public class ProductServiceImpl implements ProductsService{
 
     @Override
     public Product updateProduct(Product product) {
-        return this.productRepository.save(product);
+        return this.saveProduct(product);
     }
 
     @Override
@@ -73,7 +72,7 @@ public class ProductServiceImpl implements ProductsService{
         if(pr == null) {
             throw new ProductNotFoundException("Product with id " + id + " not found", id);
         } else {
-            Category cr = pr.getCategory();
+            Category cr = product.getCategory();
             if(product.getName() != null) {
                 pr.setName(product.getName());
             }
@@ -86,7 +85,7 @@ public class ProductServiceImpl implements ProductsService{
             if(cr != null) {
                 pr.setCategory(cr);
             }
-            if(pr.getImageUrl() != null) {
+            if(product.getImageUrl() != null) {
                 pr.setImageUrl(product.getImageUrl());
             }
             return this.productRepository.save(pr);
