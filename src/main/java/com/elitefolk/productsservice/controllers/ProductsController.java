@@ -11,12 +11,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductsController {
+    // Field Injection is not recommended as it is not a good practice
+    // it is not recommended by Spring
+    // For testing we would have to create a mock object of the service
+    // and inject it into the controller
+    // so it will be difficult task to inject it with field injection
     @Autowired
     @Qualifier("productServiceImpl")
     ProductsService productsService;
 
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable("id") Long id) {
+    public Product getProduct(@PathVariable("id") String id) {
         return productsService.getProductById(id);
     }
 
@@ -36,12 +41,12 @@ public class ProductsController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
+    public void deleteProduct(@PathVariable String id) {
         productsService.deleteProduct(id);
     }
 
     @PatchMapping("/{id}")
-    public Product partialProduct(@PathVariable Long id, @RequestBody Product product) {
+    public Product partialProduct(@PathVariable String id, @RequestBody Product product) {
         return productsService.partialProduct(id, product);
     }
 }

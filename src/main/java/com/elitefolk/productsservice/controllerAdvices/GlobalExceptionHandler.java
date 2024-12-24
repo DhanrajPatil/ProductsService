@@ -1,5 +1,6 @@
 package com.elitefolk.productsservice.controllerAdvices;
 
+import com.elitefolk.productsservice.exceptions.CategoryMissingInProductException;
 import com.elitefolk.productsservice.exceptions.CategoryNotFoundException;
 import com.elitefolk.productsservice.exceptions.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException e) {
         return new ResponseEntity<>(
-                e.getMessage(),
+                e.getMessage() + ". " + e.getProductId() + " can be invalid too",
                 HttpStatus.NOT_FOUND
         );
     }
@@ -23,6 +24,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 e.getMessage(),
                 HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(CategoryMissingInProductException.class)
+    public ResponseEntity<String> handleCategoryMissingInProductException(CategoryMissingInProductException e) {
+        return new ResponseEntity<>(
+                e.getMessage(),
+                HttpStatus.BAD_REQUEST
         );
     }
 }

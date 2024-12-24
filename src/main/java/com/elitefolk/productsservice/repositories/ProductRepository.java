@@ -15,6 +15,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Override
     List<Product> findAll();
 
+    List<Product> findByIsDeletedFalse();
+
     List<Product> findByIdIn(List<UUID> ids);
 
     List<Product> findByCategoryName(String categoryName);

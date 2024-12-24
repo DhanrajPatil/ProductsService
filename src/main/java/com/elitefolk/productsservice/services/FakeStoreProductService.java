@@ -31,7 +31,7 @@ public class FakeStoreProductService implements ProductsService {
     }
 
     @Override
-    public Product getProductById(Long id) throws ProductNotFoundException {
+    public Product getProductById(String id) throws ProductNotFoundException {
         FakeStoreProductDto fakeProduct = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/" + id,
                 FakeStoreProductDto.class
@@ -63,12 +63,12 @@ public class FakeStoreProductService implements ProductsService {
     }
 
     @Override
-    public void deleteProduct(Long id) {
+    public void deleteProduct(String id) {
         restTemplate.delete("https://fakestoreapi.com/products/" + id);
     }
 
     @Override
-    public Product partialProduct(Long id, Product product) {
+    public Product partialProduct(String id, Product product) {
         FakeStoreProductDto fakeProductDto = FakeStoreProductDto.fromProduct(product);
         restTemplate.patchForObject(
                 "https://fakestoreapi.com/products/" + id,
