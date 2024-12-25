@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProductService {
     List<Product> getProducts();
-    Product getProductById(String id) throws ProductNotFoundException;
+    List<Product> getProductByIdOrName(String id) throws ProductNotFoundException;
     Product saveProduct(Product product);
     Product updateProduct(Product product);
     void deleteProduct(String id);

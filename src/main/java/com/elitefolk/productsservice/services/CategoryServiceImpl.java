@@ -5,7 +5,6 @@ import com.elitefolk.productsservice.models.Category;
 import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.repositories.CategoryRepository;
 import com.elitefolk.productsservice.repositories.ProductRepository;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,9 +27,15 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategoryById(String categoryId) {
-        return this.categoryRepository.findById(UUID.fromString(categoryId))
-                .orElseThrow(() -> new CategoryNotFoundException("Category with id " + categoryId + " not found"));
+    public List<Category> getCategoryByIdOrName(String categoryIdOrName) {
+        try{
+            UUID id = UUID.fromString(categoryIdOrName);
+            Category cat = this.categoryRepository.findById(id)
+                    .orElseThrow(() -> new CategoryNotFoundException("Category with id " + categoryIdOrName + " not found"));
+            return List.of(cat);
+        } catch (IllegalArgumentException e) {
+            return this.categoryRepository.findByNameContains(categoryIdOrName);
+        }
     }
 
     @Override
@@ -66,6 +71,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Product> getProductsForCategory(String categoryName) {
+        Category cat = this.categoryRepository.findByName(categoryName)
+                .orElseThrow(() -> new CategoryNotFoundException("Category with name " + categoryName + " not found"));
         return this.productRepo.findByCategoryNameIgnoreCase(categoryName);
     }
 }

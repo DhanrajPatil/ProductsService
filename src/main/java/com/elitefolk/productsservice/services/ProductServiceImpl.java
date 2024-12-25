@@ -29,9 +29,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductById(String id) {
-        return this.productRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found", id));
+    public List<Product> getProductByIdOrName(String idOrName) {
+        try {
+            UUID uuid = UUID.fromString(idOrName);
+            Product product = this.productRepository.findById(uuid)
+                    .orElseThrow(() -> new ProductNotFoundException("Product with id " + idOrName + " not found", idOrName));
+            return List.of(product);
+        } catch (IllegalArgumentException e) {
+            return this.productRepository.findByNameContains(idOrName);
+        }
     }
 
     @Override

@@ -4,11 +4,11 @@ import com.elitefolk.productsservice.dtos.ProductDto;
 import com.elitefolk.productsservice.models.Category;
 import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.services.CategoryService;
-import com.elitefolk.productsservice.services.ProductService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/categories")
@@ -25,14 +25,9 @@ public class CategoryController {
         return this.categoryService.getAllCategories();
     }
 
-    @GetMapping("/{categoryId}")
-    public Category getCategoryById(@PathVariable String categoryId) {
-        return this.categoryService.getCategoryById(categoryId);
-    }
-
-    @GetMapping("/name/{categoryName}")
-    public Category getCategoryByName(@PathVariable String categoryName) {
-        return this.categoryService.getCategoryByName(categoryName);
+    @GetMapping("/{categoryIdOrName}")
+    public List<Category> getCategoryById(@PathVariable String categoryIdOrName) {
+        return this.categoryService.getCategoryByIdOrName(categoryIdOrName);
     }
 
     @GetMapping("/{categoryName}/products")
@@ -42,8 +37,10 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category addCategory(@RequestBody Category category) {
-        return this.categoryService.addCategory(category);
+    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
+        Category cat = this.categoryService.addCategory(category);
+        URI location = URI.create("/categories/" + cat.getId());
+        return ResponseEntity.created(location).body(cat);
     }
 
     @PutMapping

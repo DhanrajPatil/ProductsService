@@ -5,8 +5,10 @@ import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -31,10 +33,10 @@ public class ProductsController {
         this.productsService = productsService;
     } */
 
-    @GetMapping("/{id}")
-    public ProductDto getProduct(@PathVariable("id") String id) {
-        Product prod = productsService.getProductById(id);
-        return new ProductDto(prod);
+    @GetMapping("/{idOrName}")
+    public List<ProductDto> getProduct(@PathVariable("idOrName") String idOrName) {
+        List<Product> products = productsService.getProductByIdOrName(idOrName);
+        return ProductDto.fromProductsToDtoList(products);
     }
 
     @GetMapping
@@ -44,9 +46,11 @@ public class ProductsController {
     }
 
     @PostMapping
-    public ProductDto createProduct(@RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
         Product prod = productsService.saveProduct(productDto.toProduct());
-        return new ProductDto(prod);
+        ProductDto dto = new ProductDto(prod);
+        URI location = URI.create("/products/" + dto.getId());
+        return ResponseEntity.created(location).body(dto);
     }
 
     @PutMapping

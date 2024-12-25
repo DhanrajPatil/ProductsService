@@ -22,6 +22,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     List<Product> findByCategoryNameIgnoreCase(String categoryName);
 
+    List<Product> findByNameContains(String name);
+
     @Override
     <S extends Product> S save(S entity);
 
