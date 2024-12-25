@@ -3,6 +3,8 @@ package com.elitefolk.productsservice.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.awt.image.ImageProducer;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,6 +20,6 @@ public class Product extends BaseModel{
     private Double price;
     @Column(nullable = false)
     private String imageUrl;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 }

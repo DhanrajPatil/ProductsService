@@ -1,5 +1,6 @@
 package com.elitefolk.productsservice.controllers;
 
+import com.elitefolk.productsservice.dtos.CategoryDto;
 import com.elitefolk.productsservice.dtos.ProductDto;
 import com.elitefolk.productsservice.models.Category;
 import com.elitefolk.productsservice.models.Product;
@@ -21,13 +22,14 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> getCategories() {
-        return this.categoryService.getAllCategories();
+    public List<CategoryDto> getCategories() {
+        return CategoryDto.fromCategoriesToDtoList(this.categoryService.getAllCategories());
     }
 
     @GetMapping("/{categoryIdOrName}")
-    public List<Category> getCategoryById(@PathVariable String categoryIdOrName) {
-        return this.categoryService.getCategoryByIdOrName(categoryIdOrName);
+    public List<CategoryDto> getCategoryByIdOrName(@PathVariable String categoryIdOrName) {
+        List<Category> categories = this.categoryService.getCategoryByIdOrName(categoryIdOrName);
+        return CategoryDto.fromCategoriesToDtoList(categories);
     }
 
     @GetMapping("/{categoryName}/products")
@@ -37,15 +39,15 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
-        Category cat = this.categoryService.addCategory(category);
+    public ResponseEntity<CategoryDto> addCategory(@RequestBody CategoryDto categoryDto) {
+        Category cat = this.categoryService.addCategory(categoryDto.toCascadePersistCategory());
         URI location = URI.create("/categories/" + cat.getId());
-        return ResponseEntity.created(location).body(cat);
+        return ResponseEntity.created(location).body(new CategoryDto(cat));
     }
 
     @PutMapping
-    public Category updateCategory(@RequestBody Category category) {
-        return this.categoryService.updateCategory(category);
+    public CategoryDto updateCategory(@RequestBody Category category) {
+        return new CategoryDto(this.categoryService.updateCategory(category));
     }
 
     @DeleteMapping("/{categoryId}")

@@ -89,6 +89,9 @@ public class ProductServiceImpl implements ProductService {
                 pr.setPrice(product.getPrice());
             }
             if(cr != null) {
+                if(cr.getId() == null) {
+                    throw new CategoryMissingInProductException("Category ID is missing in JSON for Update Purpose, if you do not want to update category, please remove it from JSON");
+                }
                 pr.setCategory(cr);
             }
             if(product.getImageUrl() != null) {

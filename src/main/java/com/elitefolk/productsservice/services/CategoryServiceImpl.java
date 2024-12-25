@@ -1,5 +1,6 @@
 package com.elitefolk.productsservice.services;
 
+import com.elitefolk.productsservice.exceptions.CategoryAlreadyPresentException;
 import com.elitefolk.productsservice.exceptions.CategoryNotFoundException;
 import com.elitefolk.productsservice.models.Category;
 import com.elitefolk.productsservice.models.Product;
@@ -46,7 +47,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category addCategory(Category category) {
-        return this.categoryRepository.save(category);
+        Category cat = this.categoryRepository.findByName(category.getName())
+                .orElse(null);
+        if(cat == null) {
+            return this.categoryRepository.save(category);
+        } else {
+            throw new CategoryAlreadyPresentException(cat, "Category with name " + category.getName() + " already exists");
+        }
     }
 
     @Override

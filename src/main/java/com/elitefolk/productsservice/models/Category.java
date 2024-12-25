@@ -1,10 +1,9 @@
 package com.elitefolk.productsservice.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -15,4 +14,6 @@ import lombok.*;
 public class Category extends BaseModel{
     @Column(nullable = false, unique = true)
     private String name;
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private List<Product> products;
 }

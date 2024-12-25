@@ -13,26 +13,21 @@ import java.util.stream.Collectors;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto {
+public class CategoryProductDto {
     private String id;
     private String name;
     private String description;
     private Double price;
     private String imageUrl;
-    private String categoryName;
-    private String categoryId;
 
-    public ProductDto(Product product){
+    public CategoryProductDto(Product product){
         this.setId(product.getId().toString());
         this.setName(product.getName());
         this.setDescription(product.getDescription());
         this.setPrice(product.getPrice());
         this.setImageUrl(product.getImageUrl());
-        this.setCategoryId(product.getCategory().getId().toString());
-        this.setCategoryName(product.getCategory().getName());
     }
-
-    public Product toProduct() {
+    private Product getProduct() {
         Product product = new Product();
         if(this.id != null) {
             product.setId(UUID.fromString(this.id));
@@ -41,32 +36,38 @@ public class ProductDto {
         product.setDescription(this.description);
         product.setPrice(this.price);
         product.setImageUrl(this.imageUrl);
-        Category category = new Category();
-        if(this.categoryId != null) {
-            category.setId(UUID.fromString(this.categoryId));
-        }
-        if(this.categoryName != null) {
-            category.setName(this.categoryName);
-        }
-        if(this.categoryId != null || this.categoryName != null) {
-            product.setCategory(category);
-        }
         return product;
     }
 
-    public static ProductDto fromProduct(Product product) {
-        return new ProductDto(product);
+    public Product toProduct() {
+        return getProduct();
     }
 
-    public static List<Product> fromDtoListToProducts(List<ProductDto> productDtos) {
-        return productDtos.stream()
-                .map(ProductDto::toProduct)
+    public Product toPersistProduct(Category cat) {
+        Product prod = getProduct();
+        prod.setCategory(cat);
+        return prod;
+    }
+
+    public static CategoryProductDto fromProduct(Product product) {
+        return new CategoryProductDto(product);
+    }
+
+    public static List<Product> fromDtoListToProducts(List<CategoryProductDto> CategoryProductDtos) {
+        return CategoryProductDtos.stream()
+                .map(CategoryProductDto::toProduct)
                 .collect(Collectors.toList());
     }
 
-    public static List<ProductDto> fromProductsToDtoList(List<Product> products) {
+    public static List<Product> fromDtoListToPersistProducts(List<CategoryProductDto> CategoryProductDtos, Category cat) {
+        return CategoryProductDtos.stream()
+                .map((catDto) -> catDto.toPersistProduct(cat))
+                .collect(Collectors.toList());
+    }
+
+    public static List<CategoryProductDto> fromProductsToDtoList(List<Product> products) {
         return products.stream()
-                .map(ProductDto::new)
+                .map(CategoryProductDto::new)
                 .collect(Collectors.toList());
     }
 }
