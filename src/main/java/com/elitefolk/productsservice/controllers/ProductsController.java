@@ -5,6 +5,7 @@ import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +41,9 @@ public class ProductsController {
     }
 
     @GetMapping
-    public List<ProductDto> getProducts() {
-        List<Product> products = productsService.getProducts();
-        return ProductDto.fromProductsToDtoList(products);
+    public Page<ProductDto> getProducts(@RequestParam int page, @RequestParam int size) {
+        Page<Product> products = productsService.getProducts(page, size);
+        return products.map(ProductDto::new);
     }
 
     @PostMapping

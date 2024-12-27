@@ -19,9 +19,11 @@ public class CategoryDto {
     public CategoryDto(Category category) {
         this.id = category.getId().toString();
         this.name = category.getName();
-        this.products = CategoryProductDto.fromProductsToDtoList(
-                category.getProducts()
-        );
+        if(category.getProducts() != null) {
+            this.products = CategoryProductDto.fromProductsToDtoList(
+                    category.getProducts()
+            );
+        }
     }
 
     public static List<CategoryDto> fromCategoriesToDtoList(List<Category> categories) {

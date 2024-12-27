@@ -1,7 +1,8 @@
 package com.elitefolk.productsservice.repositories;
 
-import com.elitefolk.productsservice.models.Category;
 import com.elitefolk.productsservice.models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Override
     List<Product> findAll();
 
-    List<Product> findByIsDeletedFalse();
+    Page<Product> findByIsDeletedFalse(Pageable pageable);
 
     List<Product> findByIdIn(List<UUID> ids);
 

@@ -3,6 +3,9 @@ package com.elitefolk.productsservice.services;
 import com.elitefolk.productsservice.dtos.FakeStoreProductDto;
 import com.elitefolk.productsservice.exceptions.ProductNotFoundException;
 import com.elitefolk.productsservice.models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,7 +21,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public List<Product> getProducts() {
+    public Page<Product> getProducts(Integer page, Integer size) {
         FakeStoreProductDto[] fakeProducts = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/",
                 FakeStoreProductDto[].class
@@ -27,7 +30,7 @@ public class FakeStoreProductService implements ProductService {
         for (FakeStoreProductDto fakeProduct : fakeProducts) {
             products.add(fakeProduct.toProduct());
         }
-        return products;
+        return new PageImpl<>(products);
     }
 
     @Override

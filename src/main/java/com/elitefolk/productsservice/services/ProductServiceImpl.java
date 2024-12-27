@@ -7,6 +7,8 @@ import com.elitefolk.productsservice.models.Category;
 import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.repositories.CategoryRepository;
 import com.elitefolk.productsservice.repositories.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +26,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProducts() {
-        return this.productRepository.findByIsDeletedFalse();
+    public Page<Product> getProducts(Integer page, Integer size) {
+        return this.productRepository.findByIsDeletedFalse(
+                PageRequest.of(page, size)
+        );
     }
 
     @Override
