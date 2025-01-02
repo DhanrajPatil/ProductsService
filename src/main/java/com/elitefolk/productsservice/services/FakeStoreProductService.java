@@ -21,7 +21,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Page<Product> getProducts(Integer page, Integer size) {
+    public Page<Product> getProducts(Pageable pageable) {
         FakeStoreProductDto[] fakeProducts = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/",
                 FakeStoreProductDto[].class

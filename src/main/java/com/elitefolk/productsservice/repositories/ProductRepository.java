@@ -19,6 +19,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     Page<Product> findByIsDeletedFalse(Pageable pageable);
 
+    List<Product> findByIsDeletedFalse();
+
     List<Product> findByIdIn(List<UUID> ids);
 
     List<Product> findByCategoryNameIgnoreCase(String categoryName);

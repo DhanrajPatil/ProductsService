@@ -1,11 +1,13 @@
 package com.elitefolk.productsservice.controllers;
 
+import com.elitefolk.productsservice.dtos.PaginationResponse;
 import com.elitefolk.productsservice.dtos.ProductDto;
 import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,9 +43,10 @@ public class ProductsController {
     }
 
     @GetMapping
-    public Page<ProductDto> getProducts(@RequestParam int page, @RequestParam int size) {
-        Page<Product> products = productsService.getProducts(page, size);
-        return products.map(ProductDto::new);
+    public PaginationResponse<ProductDto> getProducts(Pageable pageable) {
+        Page<Product> products = productsService.getProducts(pageable);
+        Page<ProductDto> productsPage = products.map(ProductDto::new);
+        return new PaginationResponse<>(productsPage);
     }
 
     @PostMapping

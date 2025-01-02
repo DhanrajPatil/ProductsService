@@ -1,5 +1,6 @@
 package com.elitefolk.productsservice.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,11 +14,16 @@ import lombok.*;
 public class Product extends BaseModel{
     @Column(nullable = false)
     private String name;
+
     private String description;
+
     @Column(nullable = false)
     private Double price;
+
     @Column(nullable = false)
     private String imageUrl;
+
+    @JsonIgnoreProperties({ "products" })
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 }

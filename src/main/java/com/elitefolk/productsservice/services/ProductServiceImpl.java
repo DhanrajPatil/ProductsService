@@ -7,8 +7,7 @@ import com.elitefolk.productsservice.models.Category;
 import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.repositories.CategoryRepository;
 import com.elitefolk.productsservice.repositories.ProductRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,9 +25,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> getProducts(Integer page, Integer size) {
+    public Page<Product> getProducts(Pageable pageable) {
+        int defaultPage = pageable.getPageNumber();
+        int minSize = pageable.getPageSize();
+        if(pageable.getSort().isEmpty()) {
+            return this.productRepository.findByIsDeletedFalse(
+                    PageRequest.of(defaultPage, minSize, Sort.by("name").ascending())
+            );
+        }
+        Sort sort;
+        String defaultSortBy = pageable.getSort().toString().split(":")[0];
+        String sortDirection = pageable.getSort().toString().split(":")[1];
+        if(sortDirection.equals("DESC")) {
+            sort = Sort.by(defaultSortBy).descending();
+        } else {
+            sort = Sort.by(defaultSortBy).ascending();
+        }
+        Sort.by(defaultSortBy).ascending();
         return this.productRepository.findByIsDeletedFalse(
-                PageRequest.of(page, size)
+                PageRequest.of(defaultPage, minSize, sort)
         );
     }
 
