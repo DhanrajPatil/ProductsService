@@ -6,6 +6,7 @@ import com.elitefolk.productsservice.models.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,9 +16,11 @@ import java.util.List;
 @Service
 public class FakeStoreProductService implements ProductService {
     final RestTemplate restTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    public FakeStoreProductService(RestTemplate restTemplate, RedisTemplate<String, Object> redisTemplate) {
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -35,14 +38,22 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
     public List<Product> getProductByIdOrName(String id) throws ProductNotFoundException {
-        FakeStoreProductDto fakeProduct = restTemplate.getForObject(
-                "https://fakestoreapi.com/products/" + id,
-                FakeStoreProductDto.class
-        );
-        if(fakeProduct == null) {
-            throw new ProductNotFoundException("Product Not Found", id);
+
+        Product product = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCTS_" + id);
+        if(product != null) {
+            return List.of(product);
+        } else {
+            FakeStoreProductDto fakeProduct = restTemplate.getForObject(
+                    "https://fakestoreapi.com/products/" + id,
+                    FakeStoreProductDto.class
+            );
+            if(fakeProduct == null) {
+                throw new ProductNotFoundException("Product Not Found", id);
+            }
+            Product prod = fakeProduct.toProduct();
+            redisTemplate.opsForHash().put("PRODUCTS", "PRODUCTS_" + id, prod);
+            return List.of(prod);
         }
-        return List.of(fakeProduct.toProduct());
     }
 
     @Override

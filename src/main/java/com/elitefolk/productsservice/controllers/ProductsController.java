@@ -23,7 +23,7 @@ public class ProductsController {
     // and inject it into the controller
     // it will be difficult task to inject it with field injection
     @Autowired
-    @Qualifier("productServiceImpl")
+    @Qualifier("fakeStoreProductService")
     ProductService productsService;
 
     // Constructor Injection is recommended as it is a good practice

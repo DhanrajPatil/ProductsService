@@ -28,7 +28,10 @@ public class ProductDto {
         this.setDescription(product.getDescription());
         this.setPrice(product.getPrice());
         this.setImageUrl(product.getImageUrl());
-        this.setCategoryId(product.getCategory().getId().toString());
+        UUID categoryId = product.getCategory().getId();
+        if(categoryId != null){
+            this.setCategoryId(categoryId.toString());
+        }
         this.setCategoryName(product.getCategory().getName());
     }
 

@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Getter
@@ -18,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @MappedSuperclass
 @EnableJpaAuditing
-public class BaseModel {
+public class BaseModel implements Serializable {
     @Id
     private UUID id;
     @CreationTimestamp

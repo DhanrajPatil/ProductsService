@@ -12,7 +12,7 @@ import lombok.*;
 @Table(indexes = { @Index(name = "product_category_index", columnList = "category_id"),
                    @Index(name = "product_name_index", columnList = "name")})
 public class Product extends BaseModel{
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String name;
 
     private String description;

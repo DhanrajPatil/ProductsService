@@ -13,7 +13,7 @@ import java.util.List;
 @Entity(name = "categories")
 @Table(indexes = { @Index(name = "category_name_index", columnList = "name")})
 public class Category extends BaseModel{
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 50)
     private String name;
 
     @JsonIgnoreProperties({ "category" })
