@@ -20,7 +20,7 @@ public class Product extends BaseModel{
     @Column(nullable = false)
     private Double price;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String imageUrl;
 
     @JsonIgnoreProperties({ "products" })

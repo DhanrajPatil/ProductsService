@@ -1,7 +1,9 @@
 package com.elitefolk.productsservice.repositories;
 
+import com.elitefolk.productsservice.dtos.CategoriesUsingProcedureDto;
 import com.elitefolk.productsservice.models.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.query.Procedure;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,4 +30,7 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
 
     @Override
     void deleteById(UUID uuid);
+
+    @Procedure(name="Category.getAllCategoriesWithProducts")
+    List<CategoriesUsingProcedureDto> getAllCategoriesUsingProcedure();
 }

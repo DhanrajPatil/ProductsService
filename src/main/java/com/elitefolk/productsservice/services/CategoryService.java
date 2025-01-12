@@ -1,5 +1,6 @@
 package com.elitefolk.productsservice.services;
 
+import com.elitefolk.productsservice.dtos.CategoriesUsingProcedureDto;
 import com.elitefolk.productsservice.models.Category;
 import com.elitefolk.productsservice.models.Product;
 
@@ -8,6 +9,7 @@ import java.util.UUID;
 
 public interface CategoryService {
     List<Category> getAllCategories();
+    List<CategoriesUsingProcedureDto> getAllCategoriesUsingProcedure();
     List<Category> getCategoryByIdOrName(String categoryId);
     Category getCategoryByName(String categoryName);
     Category addCategory(Category category);

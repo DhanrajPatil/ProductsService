@@ -1,5 +1,6 @@
 package com.elitefolk.productsservice.services;
 
+import com.elitefolk.productsservice.dtos.CategoriesUsingProcedureDto;
 import com.elitefolk.productsservice.exceptions.CategoryAlreadyPresentException;
 import com.elitefolk.productsservice.exceptions.CategoryNotFoundException;
 import com.elitefolk.productsservice.models.Category;
@@ -7,6 +8,7 @@ import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.repositories.CategoryRepository;
 import com.elitefolk.productsservice.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +27,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> getAllCategories() {
         return this.categoryRepository.findAllByIsDeleted(false);
+    }
+
+    @Override
+    @Transactional
+    public List<CategoriesUsingProcedureDto> getAllCategoriesUsingProcedure(){
+        return this.categoryRepository.getAllCategoriesUsingProcedure();
     }
 
     @Override

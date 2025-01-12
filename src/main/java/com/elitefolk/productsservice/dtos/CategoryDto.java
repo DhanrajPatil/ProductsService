@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -30,6 +29,29 @@ public class CategoryDto {
         return categories.stream()
                 .map(CategoryDto::new)
                 .toList();
+    }
+
+    public static List<CategoryDto> fromProcedureCategories(List<CategoriesUsingProcedureDto> categories) {
+        Map<String, List<CategoryProductDto>> catMap = new HashMap<>();
+        for(CategoriesUsingProcedureDto cat : categories) {
+            if(catMap.containsKey(cat.getCategoryId() + ":" + cat.getCategoryName())) {
+                catMap.get(cat.getCategoryId() + ":" + cat.getCategoryName()).add(
+                        new CategoryProductDto(cat.getProductId().toString(), cat.getProductName(), cat.getProductDescription(), cat.getPrice(), cat.getImageUrl())
+                );
+            } else {
+                List<CategoryProductDto> prods = new ArrayList<>();
+                if(cat.getProductId() != null) {
+                    prods.add(new CategoryProductDto(cat.getProductId().toString(), cat.getProductName(), cat.getProductDescription(), cat.getPrice(), cat.getImageUrl()));
+                }
+                catMap.put(cat.getCategoryId() + ":" + cat.getCategoryName(), prods);
+            }
+        }
+        List<CategoryDto> cats = new ArrayList<>();
+        for(Map.Entry<String, List<CategoryProductDto>> entry : catMap.entrySet()) {
+            String[] key = entry.getKey().split(":");
+            cats.add(new CategoryDto(key[0], key[1], entry.getValue()));
+        }
+        return cats;
     }
 
     public static CategoryDto fromCategoryToDto(Category category) {

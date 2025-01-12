@@ -26,6 +26,11 @@ public class CategoryController {
         return CategoryDto.fromCategoriesToDtoList(this.categoryService.getAllCategories());
     }
 
+    @GetMapping("/using/procedure")
+    public List<CategoryDto> getCategoriesUsingProcedure() {
+        return CategoryDto.fromProcedureCategories(this.categoryService.getAllCategoriesUsingProcedure());
+    }
+
     @GetMapping("/{categoryIdOrName}")
     public List<CategoryDto> getCategoryByIdOrName(@PathVariable String categoryIdOrName) {
         List<Category> categories = this.categoryService.getCategoryByIdOrName(categoryIdOrName);
