@@ -17,6 +17,5 @@ public interface CategoryService {
     void deleteCategory(String categoryId);
     List<Category> getCategoriesByIds(List<UUID> categoryIds);
     List<Category> getCategoriesByNameContains(String containingName);
-
     List<Product> getProductsForCategory(String categoryName);
 }

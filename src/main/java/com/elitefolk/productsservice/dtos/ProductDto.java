@@ -14,31 +14,28 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDto {
-    private String id;
+    private UUID id;
     private String name;
     private String description;
     private Double price;
     private String imageUrl;
     private String categoryName;
-    private String categoryId;
+    private UUID categoryId;
 
     public ProductDto(Product product){
-        this.setId(product.getId().toString());
+        this.setId(product.getId());
         this.setName(product.getName());
         this.setDescription(product.getDescription());
         this.setPrice(product.getPrice());
         this.setImageUrl(product.getImageUrl());
-        UUID categoryId = product.getCategory().getId();
-        if(categoryId != null){
-            this.setCategoryId(categoryId.toString());
-        }
+        this.setCategoryId(product.getCategory().getId());
         this.setCategoryName(product.getCategory().getName());
     }
 
     public Product toProduct() {
         Product product = new Product();
         if(this.id != null) {
-            product.setId(UUID.fromString(this.id));
+            product.setId(this.id);
         }
         product.setName(this.name);
         product.setDescription(this.description);
@@ -46,7 +43,7 @@ public class ProductDto {
         product.setImageUrl(this.imageUrl);
         Category category = new Category();
         if(this.categoryId != null) {
-            category.setId(UUID.fromString(this.categoryId));
+            category.setId(this.categoryId);
         }
         if(this.categoryName != null) {
             category.setName(this.categoryName);

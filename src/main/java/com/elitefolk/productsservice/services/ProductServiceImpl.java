@@ -1,5 +1,6 @@
 package com.elitefolk.productsservice.services;
 
+import com.elitefolk.productsservice.dtos.ProductDto;
 import com.elitefolk.productsservice.exceptions.CategoryMissingInProductException;
 import com.elitefolk.productsservice.exceptions.CategoryNotFoundException;
 import com.elitefolk.productsservice.exceptions.ProductNotFoundException;
@@ -9,6 +10,7 @@ import com.elitefolk.productsservice.repositories.CategoryRepository;
 import com.elitefolk.productsservice.repositories.ProductRepository;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -45,6 +47,17 @@ public class ProductServiceImpl implements ProductService {
         return this.productRepository.findByIsDeletedFalse(
                 PageRequest.of(defaultPage, minSize, sort)
         );
+    }
+
+    @Override
+    @Transactional
+    public Page<ProductDto> getProductsUsingProcedure(Pageable pageable) {
+        List<ProductDto> dtos = this.productRepository.getAllProductWithCategories(
+                pageable.getPageSize(),
+                pageable.getPageNumber()
+        );
+        Long totalRecords = this.productRepository.count();
+        return new PageImpl<>(dtos, pageable, totalRecords);
     }
 
     @Override

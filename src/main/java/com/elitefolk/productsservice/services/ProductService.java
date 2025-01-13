@@ -1,5 +1,6 @@
 package com.elitefolk.productsservice.services;
 
+import com.elitefolk.productsservice.dtos.ProductDto;
 import com.elitefolk.productsservice.exceptions.ProductNotFoundException;
 import com.elitefolk.productsservice.models.Product;
 import org.springframework.data.domain.Page;
@@ -14,4 +15,5 @@ public interface ProductService {
     Product updateProduct(Product product);
     void deleteProduct(String id);
     Product partialProduct(String id, Product product);
+    Page<ProductDto> getProductsUsingProcedure(Pageable pageable);
 }

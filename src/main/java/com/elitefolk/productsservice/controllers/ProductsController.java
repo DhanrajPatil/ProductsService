@@ -49,6 +49,12 @@ public class ProductsController {
         return new PaginationResponse<>(productsPage);
     }
 
+    @GetMapping("/using/procedure")
+    public PaginationResponse<ProductDto> getProductsUsingProcedure(Pageable pageable) {
+        Page<ProductDto> products = productsService.getProductsUsingProcedure(pageable);
+        return new PaginationResponse<>(products);
+    }
+
     @PostMapping
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
         Product prod = productsService.saveProduct(productDto.toProduct());

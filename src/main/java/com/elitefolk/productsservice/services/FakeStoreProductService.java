@@ -1,6 +1,7 @@
 package com.elitefolk.productsservice.services;
 
 import com.elitefolk.productsservice.dtos.FakeStoreProductDto;
+import com.elitefolk.productsservice.dtos.ProductDto;
 import com.elitefolk.productsservice.exceptions.ProductNotFoundException;
 import com.elitefolk.productsservice.models.Product;
 import org.springframework.data.domain.Page;
@@ -90,5 +91,10 @@ public class FakeStoreProductService implements ProductService {
                 Product.class
         );
         return product;
+    }
+
+    public Page<ProductDto> getProductsUsingProcedure(Pageable pageable) {
+        Page<Product> products = getProducts(pageable);
+        return products.map(ProductDto::new);
     }
 }
