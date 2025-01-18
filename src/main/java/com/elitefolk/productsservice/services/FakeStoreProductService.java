@@ -93,8 +93,33 @@ public class FakeStoreProductService implements ProductService {
         return product;
     }
 
+    @Override
     public Page<ProductDto> getProductsUsingProcedure(Pageable pageable) {
         Page<Product> products = getProducts(pageable);
         return products.map(ProductDto::new);
+    }
+
+    @Override
+    public Page<ProductDto> fetchProducts(Pageable pageable) {
+        Page<Product> products = getProducts(pageable);
+        return products.map(ProductDto::new);
+    }
+
+    @Override
+    public Page<ProductDto> fetchAllProductDtos(Pageable pageable) {
+        FakeStoreProductDto[] fakeProducts = restTemplate.getForObject(
+                "https://fakestoreapi.com/products/",
+                FakeStoreProductDto[].class
+        );
+        List<ProductDto> products = new ArrayList<>();
+        for (FakeStoreProductDto fakeProduct : fakeProducts) {
+            products.add(new ProductDto(fakeProduct.toProduct()));
+        }
+        return new PageImpl<>(products);
+    }
+
+    @Override
+    public Page<ProductDto>fetchAllProductDtosJpqlJoin(Pageable pageable) {
+        return fetchAllProductDtos(pageable);
     }
 }

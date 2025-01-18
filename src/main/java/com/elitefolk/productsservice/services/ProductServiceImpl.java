@@ -52,9 +52,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Page<ProductDto> getProductsUsingProcedure(Pageable pageable) {
-        List<ProductDto> dtos = this.productRepository.getAllProductWithCategories(
+        String sortValue = pageable.getSort().toString();
+        String sortField = "price";
+        if(!sortValue.equals("UNSORTED")) {
+            sortField = sortValue;
+        }
+        List<ProductDto> dtos = this.productRepository.getAllProductUsingProcedure(
                 pageable.getPageSize(),
-                pageable.getPageNumber()
+                pageable.getPageNumber(),
+                sortField,
+                "DESC"
         );
         Long totalRecords = this.productRepository.count();
         return new PageImpl<>(dtos, pageable, totalRecords);
@@ -131,5 +138,32 @@ public class ProductServiceImpl implements ProductService {
             }
             return this.productRepository.save(pr);
         }
+    }
+
+    @Override
+    public Page<ProductDto> fetchProducts(Pageable pageable) {
+        String sortValue = pageable.getSort().toString();
+        String sortField = "price";
+        if(!sortValue.equals("UNSORTED")) {
+            sortField = sortValue;
+        }
+        List<ProductDto> products = this.productRepository.fetchProductsByDeletedFalse(
+                pageable.getPageSize(),
+                pageable.getPageNumber(),
+                sortField
+        );
+        //List<ProductDto> dtos = ProductDto.fromProductsToDtoList(products);
+        Long totalRecords = this.productRepository.countByIsDeletedFalse();
+        return new PageImpl<>(products, pageable, totalRecords);
+    }
+
+    @Override
+    public Page<ProductDto> fetchAllProductDtos(Pageable pageable) {
+        return this.productRepository.findAllProductDtos(pageable);
+    }
+
+    @Override
+    public Page<ProductDto> fetchAllProductDtosJpqlJoin(Pageable pageable) {
+        return this.productRepository.findAllProductDtosJpqlJoin(pageable);
     }
 }

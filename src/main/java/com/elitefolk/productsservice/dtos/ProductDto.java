@@ -28,8 +28,10 @@ public class ProductDto {
         this.setDescription(product.getDescription());
         this.setPrice(product.getPrice());
         this.setImageUrl(product.getImageUrl());
-        this.setCategoryId(product.getCategory().getId());
-        this.setCategoryName(product.getCategory().getName());
+        if(product.getCategory() != null) {
+            this.setCategoryId(product.getCategory().getId());
+            this.setCategoryName(product.getCategory().getName());
+        }
     }
 
     public Product toProduct() {

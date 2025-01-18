@@ -1,12 +1,15 @@
 package com.elitefolk.productsservice.services;
 
 import com.elitefolk.productsservice.dtos.CategoriesUsingProcedureDto;
+import com.elitefolk.productsservice.dtos.ProductDto;
 import com.elitefolk.productsservice.exceptions.CategoryAlreadyPresentException;
 import com.elitefolk.productsservice.exceptions.CategoryNotFoundException;
 import com.elitefolk.productsservice.models.Category;
 import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.repositories.CategoryRepository;
 import com.elitefolk.productsservice.repositories.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,5 +92,10 @@ public class CategoryServiceImpl implements CategoryService {
         Category cat = this.categoryRepository.findByName(categoryName)
                 .orElseThrow(() -> new CategoryNotFoundException("Category with name " + categoryName + " not found"));
         return this.productRepo.findByCategoryNameIgnoreCase(categoryName);
+    }
+
+    @Override
+    public Page<CategoriesUsingProcedureDto> getAllCategoriesJpqlJoin(Pageable pageable){
+        return this.categoryRepository.findAllCategoriesJpqlJoin(pageable);
     }
 }

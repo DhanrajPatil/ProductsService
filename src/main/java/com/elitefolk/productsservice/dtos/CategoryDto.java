@@ -34,8 +34,9 @@ public class CategoryDto {
     public static List<CategoryDto> fromProcedureCategories(List<CategoriesUsingProcedureDto> categories) {
         Map<String, List<CategoryProductDto>> catMap = new HashMap<>();
         for(CategoriesUsingProcedureDto cat : categories) {
-            if(catMap.containsKey(cat.getCategoryId() + ":" + cat.getCategoryName())) {
-                catMap.get(cat.getCategoryId() + ":" + cat.getCategoryName()).add(
+            String key = cat.getCategoryId().toString();
+            if(catMap.containsKey(key)) {
+                catMap.get(key).add(
                         new CategoryProductDto(cat.getProductId().toString(), cat.getProductName(), cat.getProductDescription(), cat.getPrice(), cat.getImageUrl())
                 );
             } else {
@@ -43,13 +44,20 @@ public class CategoryDto {
                 if(cat.getProductId() != null) {
                     prods.add(new CategoryProductDto(cat.getProductId().toString(), cat.getProductName(), cat.getProductDescription(), cat.getPrice(), cat.getImageUrl()));
                 }
-                catMap.put(cat.getCategoryId() + ":" + cat.getCategoryName(), prods);
+                catMap.put(key, prods);
             }
         }
         List<CategoryDto> cats = new ArrayList<>();
-        for(Map.Entry<String, List<CategoryProductDto>> entry : catMap.entrySet()) {
-            String[] key = entry.getKey().split(":");
-            cats.add(new CategoryDto(key[0], key[1], entry.getValue()));
+        Set<String> catIds = new HashSet<>();
+        for(CategoriesUsingProcedureDto cat : categories) {
+            String key = cat.getCategoryId().toString();
+            if(catIds.contains(key)) {
+                continue;
+            }
+            catIds.add(key);
+            if(catMap.containsKey(key)) {
+                cats.add(new CategoryDto(cat.getCategoryId().toString(), cat.getCategoryName(), catMap.get(key)));
+            }
         }
         return cats;
     }

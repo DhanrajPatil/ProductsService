@@ -5,6 +5,7 @@ import com.elitefolk.productsservice.models.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -42,6 +43,32 @@ public interface ProductRepository extends JpaRepository<Product, UUID>{
     void delete(Product entity);
 
     @Procedure(name = "Product.getAllProductWithCategoryDetails")
-    List<ProductDto> getAllProductWithCategories(@Param("pageSize") Integer size,
-                                                 @Param("pageNo") Integer pageNo);
+    List<ProductDto> getAllProductUsingProcedure(@Param("pageSize") Integer size,
+                                                 @Param("pageNo") Integer pageNo,
+                                                 @Param("sortColumn") String sortField,
+                                                 @Param("sortDirection") String sortDirection);
+
+    @Query(
+            name = "fetch_products_by_deleted_false",
+            nativeQuery = true
+    )
+    List<ProductDto> fetchProductsByDeletedFalse(@Param("pageSize") Integer size,
+                                                 @Param("pageNo") Integer pageNo,
+                                                 @Param("sortField") String sortField);
+
+    Long countByIsDeletedFalse();
+
+    @Query("SELECT new com.elitefolk.productsservice.dtos.ProductDto(p) " +
+            "FROM products p " +
+            "WHERE p.isDeleted = false"
+    )
+    Page<ProductDto> findAllProductDtos(Pageable pageable);
+
+    @Query("SELECT new com.elitefolk.productsservice.dtos.ProductDto(p.id, p.name, p.description, p.price, p.imageUrl, c.name, c.id) " +
+            "FROM products p " +
+            "JOIN p.category c " +
+            "WHERE p.isDeleted = false"
+    )
+    Page<ProductDto> findAllProductDtosJpqlJoin(Pageable pageable);
+
 }

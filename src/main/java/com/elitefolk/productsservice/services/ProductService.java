@@ -16,4 +16,8 @@ public interface ProductService {
     void deleteProduct(String id);
     Product partialProduct(String id, Product product);
     Page<ProductDto> getProductsUsingProcedure(Pageable pageable);
+    Page<ProductDto> fetchProducts(Pageable pageable);
+
+    Page<ProductDto> fetchAllProductDtos(Pageable pageable);
+    Page<ProductDto> fetchAllProductDtosJpqlJoin(Pageable pageable);
 }

@@ -2,7 +2,10 @@ package com.elitefolk.productsservice.repositories;
 
 import com.elitefolk.productsservice.dtos.CategoriesUsingProcedureDto;
 import com.elitefolk.productsservice.models.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Repository;
 
@@ -35,4 +38,11 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
 
     @Procedure(name="Category.getAllCategoriesWithProducts")
     List<CategoriesUsingProcedureDto> getAllCategoriesUsingProcedure();
+
+    @Query("SELECT new com.elitefolk.productsservice.dtos.CategoriesUsingProcedureDto(c.id, c.name, p.id, p.name, p.description, p.price, p.imageUrl) " +
+            "FROM categories c " +
+            "LEFT JOIN c.products p " +
+            "WHERE c.isDeleted = false"
+    )
+    Page<CategoriesUsingProcedureDto> findAllCategoriesJpqlJoin(Pageable pageable);
 }

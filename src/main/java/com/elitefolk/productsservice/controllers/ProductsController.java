@@ -4,10 +4,13 @@ import com.elitefolk.productsservice.dtos.PaginationResponse;
 import com.elitefolk.productsservice.dtos.ProductDto;
 import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.services.ProductService;
+import com.elitefolk.productsservice.utilities.PagingUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +50,29 @@ public class ProductsController {
         Page<Product> products = productsService.getProducts(pageable);
         Page<ProductDto> productsPage = products.map(ProductDto::new);
         return new PaginationResponse<>(productsPage);
+    }
+
+    @GetMapping("/using/namesNativeQuery")
+    public PaginationResponse<ProductDto> getProductsByNamedNativeQuery(Pageable pageable) {
+        Page<ProductDto> productsPage = productsService.fetchProducts(pageable);
+        return new PaginationResponse<>(productsPage);
+    }
+
+    @GetMapping("/using/jpaQuery")
+    // using directly pageable, sorting direction not working
+    // sorting direction is getting attached by default ASC to using custom.
+    //public PaginationResponse<ProductDto> getProductsByJpaQuery(Pageable pageable) {
+    public PaginationResponse<ProductDto> getProductsByJpaQuery(Integer page, Integer size, String sort, String direction) {
+        Pageable pageable = PagingUtility.getPageable(page, size, sort, direction);
+        Page<ProductDto> dtos = productsService.fetchAllProductDtos(pageable);
+        return new PaginationResponse<>(dtos);
+    }
+
+    @GetMapping("/using/jpqlJoin")
+    public PaginationResponse<ProductDto> getProductsByJpqlJoin(Integer page, Integer size, String sort, String direction) {
+        Pageable pageable = PagingUtility.getPageable(page, size, sort, direction);
+        Page<ProductDto> dtos = productsService.fetchAllProductDtosJpqlJoin(pageable);
+        return new PaginationResponse<>(dtos);
     }
 
     @GetMapping("/using/procedure")

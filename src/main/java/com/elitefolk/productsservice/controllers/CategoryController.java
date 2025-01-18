@@ -1,10 +1,16 @@
 package com.elitefolk.productsservice.controllers;
 
+import com.elitefolk.productsservice.dtos.CategoriesUsingProcedureDto;
 import com.elitefolk.productsservice.dtos.CategoryDto;
+import com.elitefolk.productsservice.dtos.PaginationResponse;
 import com.elitefolk.productsservice.dtos.ProductDto;
 import com.elitefolk.productsservice.models.Category;
 import com.elitefolk.productsservice.models.Product;
 import com.elitefolk.productsservice.services.CategoryService;
+import com.elitefolk.productsservice.utilities.PagingUtility;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +35,17 @@ public class CategoryController {
     @GetMapping("/using/procedure")
     public List<CategoryDto> getCategoriesUsingProcedure() {
         return CategoryDto.fromProcedureCategories(this.categoryService.getAllCategoriesUsingProcedure());
+    }
+
+    @GetMapping("/using/jpql")
+    public PaginationResponse<CategoryDto> getCategoriesUsingProcedure(Integer page, Integer size,
+                                                                       String sort, String direction) {
+        Pageable pageable = PagingUtility.getPageable(page, size, sort, direction);
+        Page<CategoriesUsingProcedureDto> categories = this.categoryService.getAllCategoriesJpqlJoin(pageable);
+        PageImpl<CategoryDto> dto = new PageImpl<CategoryDto>(CategoryDto.fromProcedureCategories(
+                categories.getContent()
+        ), pageable, categories.getTotalElements());
+        return new PaginationResponse<>(dto);
     }
 
     @GetMapping("/{categoryIdOrName}")
